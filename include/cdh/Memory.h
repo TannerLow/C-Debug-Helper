@@ -17,6 +17,11 @@ overwrite all references to malloc.
 
 #endif // DEBUG
 
+/*
+If you would like to define your own memory functions that will override
+the std library ones, define this macro. Otherwise the following overrides
+will be used in debug mode.
+*/
 #ifndef CDH_USE_CUSTOM_MEMORY_FUNCTIONS
 
 #include <stddef.h>
@@ -29,6 +34,6 @@ void cdh_debug_free(void* heapPointer, const char* file, const int line);
 #define cdh_debug_calloc(n, size) cdh_debug_calloc(n, size, __FILE__, __LINE__)
 #define cdh_debug_free(ptr) cdh_debug_free(ptr, __FILE__, __LINE__)
 
-#endif // CDH_CUSTOM_MEMORY_FUNCTIONS
+#endif // CDH_USE_CUSTOM_MEMORY_FUNCTIONS
 
 #endif // CDH_MEMORY_H

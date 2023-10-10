@@ -13,6 +13,7 @@ OBJ = $(patsubst %.c,build/release/%.o,$(SRC))
 OBJ_D = $(patsubst %.c,build/debug/%.o,$(SRC))
 BUILD_DIR = $(addprefix build/release/src/,$(MODULES))
 BUILD_DIR_D = $(addprefix build/debug/src/,$(MODULES))
+TEST_SRC := $(wildcard test/*.c)
 
 INCLUDES := -I "./include"
 LIBDIR   := -L "./lib/release/x86_64"
@@ -94,13 +95,13 @@ debug:
 	$(MAKE) debug_executable CFLAGS="-DDEBUG $(CFLAGS)"
 
 release_executable: release_library
-	$(LD) $(CFLAGS) test/main.c -o $(EXECUTABLE) $(INCLUDES) -L . -l $(basename $(LIBRARY)) $(LIBDIR) $(LIBS)
+	$(LD) $(CFLAGS) $(TEST_SRC) -o $(EXECUTABLE) $(INCLUDES) -L . -l $(basename $(LIBRARY)) $(LIBDIR) $(LIBS)
 
 release_library: $(BUILD_DIR) $(OBJ)
 	$(AR) rcs $(LIBRARY) $(foreach obj,$(OBJ), -o $(obj)) 
 
 debug_executable: debug_library
-	$(LD) $(CFLAGS) test/main.c -o $(EXECUTABLE_D) $(INCLUDES) -L . -l $(basename $(LIBRARY_D)) $(LIBDIR_D) $(LIBS_D)
+	$(LD) $(CFLAGS) $(TEST_SRC) -o $(EXECUTABLE_D) $(INCLUDES) -L . -l $(basename $(LIBRARY_D)) $(LIBDIR_D) $(LIBS_D)
 
 debug_library: $(BUILD_DIR_D) $(OBJ_D)
 	$(AR) rcs $(LIBRARY_D) $(foreach obj,$(OBJ_D), -o $(obj)) 
